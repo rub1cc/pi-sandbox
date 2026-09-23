@@ -1,12 +1,13 @@
 {
   "name": "pi-extension-sandbox",
   "private": true,
-  "version": "1.17.0",
+  "version": "1.18.0",
   "type": "module",
   "scripts": {
     "clean": "echo 'nothing to clean'",
     "build": "echo 'nothing to build'",
-    "check": "echo 'nothing to check'"
+    "check": "npm test",
+    "test": "node --test test/*.test.ts"
   },
   "pi": {
     "extensions": [
@@ -14,6 +15,6 @@
     ]
   },
   "dependencies": {
-    "@anthropic-ai/sandbox-runtime": "0.0.26"
+    "@anthropic-ai/sandbox-runtime": "0.0.77"
   }
 }

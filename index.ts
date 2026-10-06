@@ -32,7 +32,7 @@ import {
   SelectList,
   Text,
 } from "@earendil-works/pi-tui";
-import { codexBashRenderers } from "../renderer/renderers.ts";
+import { codexBashRenderers } from "@rub1cc/pi-renderer/renderers";
 import { ApprovalController } from "./approvals.ts";
 import {
   configuredMode,
@@ -247,12 +247,18 @@ export default function sandboxExtension(pi: ExtensionAPI) {
     const mode = approvals.getMode();
     const info = getPermissionModeInfo(mode);
     const unavailable = info.sandboxed && !sandboxInitialized;
-    const suffix = unavailable ? " (sandbox unavailable)" : "";
     const color =
       mode === "full-access" ? "warning" : unavailable ? "error" : "accent";
+    const domains = config.network.allowedDomains.length;
+    const writePaths = config.filesystem.allowWrite.length;
+    const status = mode === "full-access"
+      ? "🔓 Full access: sandbox disabled"
+      : unavailable
+        ? `⚠ Sandbox unavailable · ${info.label}`
+        : `🔒 Sandbox: ${domains} domain${domains === 1 ? "" : "s"}, ${writePaths} write path${writePaths === 1 ? "" : "s"} · ${info.label}`;
     ctx.ui.setStatus(
       "permissions",
-      ctx.ui.theme.fg(color, `Permissions: ${info.label}${suffix}`),
+      ctx.ui.theme.fg(color, status),
     );
     ctx.ui.setStatus("sandbox", undefined);
   };

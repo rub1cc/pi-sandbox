@@ -1,20 +1,50 @@
 {
-  "name": "pi-extension-sandbox",
-  "private": true,
+  "name": "@rub1cc/pi-sandbox",
   "version": "1.18.0",
+  "description": "Codex-style permissions and OS-level sandboxing for Pi",
   "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "files": [
+    "index.ts",
+    "approvals.ts",
+    "config.ts",
+    "executor.ts",
+    "modes.ts",
+    "policy.ts",
+    "reviewer.ts",
+    "README.md"
+  ],
   "scripts": {
     "clean": "echo 'nothing to clean'",
     "build": "echo 'nothing to build'",
-    "check": "npm test",
-    "test": "node --test test/*.test.ts"
+    "check": "bun test",
+    "test": "bun test"
+  },
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "sandbox",
+    "permissions"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@anthropic-ai/sandbox-runtime": "0.0.77",
+    "@rub1cc/pi-renderer": "1.0.0"
+  },
+  "bundledDependencies": [
+    "@rub1cc/pi-renderer"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
   },
   "pi": {
     "extensions": [
       "./index.ts"
     ]
-  },
-  "dependencies": {
-    "@anthropic-ai/sandbox-runtime": "0.0.77"
   }
 }

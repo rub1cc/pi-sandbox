@@ -1,7 +1,38 @@
-# Pi sandbox and permissions
+# @rub1cc/pi-sandbox
 
 This extension gives Pi a Codex-style permission selector while keeping
 `sandbox/index.ts` as the sole owner of bash execution.
+
+## Install
+
+```bash
+pi install npm:@rub1cc/pi-sandbox
+```
+
+Try it for one invocation without adding it to settings:
+
+```bash
+pi -e npm:@rub1cc/pi-sandbox
+```
+
+The package bundles the compatible `@rub1cc/pi-renderer` module used to render
+bash calls. Install `@rub1cc/pi-renderer` separately when you also want its
+rendering for Pi's other built-in tools.
+
+For publishing, release `@rub1cc/pi-renderer@1.0.0` first, install that exact
+version in this package, then pack or publish the sandbox so npm includes the
+declared bundled dependency.
+
+## Development
+
+Run `BUN_RUNTIME_TRANSPILER_CACHE_PATH=0 bun test` against the same Pi installation
+used to load the extension. Standalone Bun tests use physical Node module
+resolution, not Pi's host-module aliases. Avoid stale copies of
+`@earendil-works/pi-coding-agent` and `@earendil-works/pi-tui` in this package's
+`node_modules`; link them to the installed host (or resolve them from the parent
+workspace). Keep these host packages as peer dependencies, not bundled runtime
+dependencies. For npm dependency installs, `--legacy-peer-deps` avoids installing
+separate copies of the host peers.
 
 ## Permission modes
 

@@ -19,7 +19,7 @@ The package bundles the compatible `@rub1cc/pi-renderer` module used to render
 bash calls. Install `@rub1cc/pi-renderer` separately when you also want its
 rendering for Pi's other built-in tools.
 
-For publishing, release `@rub1cc/pi-renderer@1.0.0` first, install that exact
+For publishing, release `@rub1cc/pi-renderer@0.1.0` first, install that exact
 version in this package, then pack or publish the sandbox so npm includes the
 declared bundled dependency.
 

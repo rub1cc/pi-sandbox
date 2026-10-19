@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -41,6 +41,22 @@ test("extracts every affected apply_patch path", () => {
     "src/moved.ts",
     "src/gone.ts",
   ]);
+});
+
+test("rejects apply_patch leaf symlinks before target pinning", async () => {
+  const cwd = await mkdtemp(join(tmpdir(), "pi-sandbox-patch-link-"));
+  try {
+    await writeFile(join(cwd, "target.txt"), "keep\n");
+    await symlink("target.txt", join(cwd, "link.txt"));
+    await symlink("missing.txt", join(cwd, "dangling.txt"));
+    for (const file of ["link.txt", "dangling.txt"]) {
+      await assert.rejects(evaluateToolPermission("apply_patch", {
+        patch: `*** Begin Patch\n*** Delete File: ${file}\n*** End Patch`,
+      }, cwd, policy(cwd)), /Cannot patch a symbolic link/);
+    }
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
 });
 
 test("allows ordinary writes inside a configured root", async () => {

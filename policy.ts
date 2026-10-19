@@ -333,6 +333,18 @@ export async function evaluateToolPermission(
       );
     }),
   );
+  if (toolName === "apply_patch") {
+    // Reject leaf symlinks before pinning can erase their lexical identity.
+    for (const path of resolvedPaths) {
+      try {
+        if ((await lstat(path)).isSymbolicLink()) {
+          throw new Error(`Cannot patch a symbolic link: ${path}`);
+        }
+      } catch (error: any) {
+        if (error?.code !== "ENOENT") throw error;
+      }
+    }
+  }
   const resolvedCwd = resolvePolicyPath(".", cwd);
   const canonicalCwd = await canonicalizeAbsolute(resolvedCwd, new Set());
   const lexicalPaths = await Promise.all(

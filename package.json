@@ -1,6 +1,6 @@
 {
   "name": "@rub1cc/pi-sandbox",
-  "version": "1.18.0",
+  "version": "0.1.0",
   "description": "Codex-style permissions and OS-level sandboxing for Pi",
   "type": "module",
   "exports": {
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sandbox-runtime": "0.0.77",
-    "@rub1cc/pi-renderer": "1.0.0"
+    "@rub1cc/pi-renderer": "0.1.0"
   },
   "bundledDependencies": [
     "@rub1cc/pi-renderer"

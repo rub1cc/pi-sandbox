@@ -2,6 +2,10 @@
   "name": "@rub1cc/pi-sandbox",
   "version": "0.1.0",
   "description": "Codex-style permissions and OS-level sandboxing for Pi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rub1cc/pi-sandbox.git"
+  },
   "type": "module",
   "exports": {
     ".": "./index.ts"

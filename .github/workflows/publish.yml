@@ -1,0 +1,49 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
+
+      - name: Verify release tag and repository
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import fs from "node:fs";
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          assert.match(pkg.version, /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/, "Only stable releases are supported");
+          assert.equal(process.env.GITHUB_REF_NAME, `v${pkg.version}`, "Tag must match package.json version");
+          assert.equal(pkg.repository?.url, `git+https://github.com/${process.env.GITHUB_REPOSITORY}.git`, "Repository metadata must match GitHub");
+          NODE
+
+      - name: Update npm for trusted publishing
+        run: npm install --global npm@latest
+
+      # Install runtime/bundled dependencies without duplicate Pi host peers.
+      - name: Install publish dependencies
+        run: npm install --omit=dev --ignore-scripts --legacy-peer-deps --package-lock=false
+
+      - name: Inspect package contents
+        run: npm pack --dry-run
+
+      - name: Publish with npm trusted publishing
+        run: npm publish --access public

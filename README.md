@@ -160,3 +160,8 @@ Use `/sandbox` to inspect the effective mode and configuration.
 - Auto-review model usage is separate from the main agent turn and may incur
   additional model usage.
 
+## Releases
+
+See [RELEASING.md](RELEASING.md) for npm trusted publishing and tag-based releases
+with `npm version`.
+
